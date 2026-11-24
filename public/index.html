@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101c2c">
+  <meta name="description" content="Espace de gestion des demandes clients, devis et relances.">
+  <title>Atelier — Gestion commerciale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <section id="login" class="login-screen">
+    <div class="login-art"><div class="brand brand-light"><span class="brand-mark">A</span><span>atelier<span class="brand-dot">.</span></span></div><div class="login-message"><span class="eyebrow">VOTRE ESPACE DE GESTION</span><h1>Chaque demande<br>mérite un <em>suivi parfait.</em></h1><p>Vos clients, vos devis et vos prochaines actions. Tout au même endroit.</p></div><div class="login-foot">Un espace simple pour garder le contrôle.</div></div>
+    <div class="login-side"><form id="loginForm" class="login-card"><div class="brand brand-dark"><span class="brand-mark">A</span><span>atelier<span class="brand-dot">.</span></span></div><span class="eyebrow">BON RETOUR</span><h2>Connectez-vous</h2><p class="muted">Accédez à votre espace professionnel.</p><label>Identifiant<input name="username" autocomplete="username" required placeholder="Votre identifiant"></label><label>Mot de passe<input name="password" type="password" autocomplete="current-password" required placeholder="Votre mot de passe"></label><button class="btn btn-primary btn-wide">Ouvrir mon espace <span>→</span></button><p id="loginError" class="error" aria-live="polite"></p><small class="login-secure">Connexion sécurisée · Espace privé</small></form></div>
+  </section>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand brand-light"><span class="brand-mark">A</span><span>atelier<span class="brand-dot">.</span></span></div>
+      <div class="workspace"><span class="workspace-icon">⌂</span><div><b>Mon entreprise</b><small>Espace de travail</small></div><span class="chevron">⌄</span></div>
+      <div class="nav-label">ESPACE DE TRAVAIL</div>
+      <nav class="main-nav">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span>Vue d'ensemble</button>
+        <button class="nav-link" data-view="leads"><span class="nav-icon">☷</span>Demandes clients<span class="nav-count" id="navCount">0</span></button>
+        <button class="nav-link" data-view="pipeline"><span class="nav-icon">▤</span>Pipeline des devis</button>
+        <button class="nav-link" data-view="reminders"><span class="nav-icon">◷</span>Relances<span class="nav-alert" id="navDue"></span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="help-card"><div class="help-icon">✦</div><b>Un suivi régulier fait la différence.</b><p>Gardez vos prochaines actions à portée de main.</p></div><button id="logout" class="logout"><span>↪</span> Déconnexion</button><div class="user-mini"><div class="avatar">EI</div><div><b>Administrateur</b><small>Compte propriétaire</small></div><span class="online"></span></div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button id="mobileMenu" class="mobile-menu" aria-label="Ouvrir le menu">☰</button><div class="breadcrumb">Espace de travail <span>/</span> <b id="crumb">Vue d'ensemble</b></div><div class="top-actions"><span class="today" id="today"></span><button class="icon-btn" id="topRefresh" title="Actualiser">↻</button><button class="btn btn-primary btn-small" id="topAdd">＋ Nouvelle demande</button></div></header>
+      <div class="content">
+        <section id="view-dashboard" class="view">
+          <div class="page-heading"><div><span class="eyebrow">TABLEAU DE BORD</span><h1>Bonjour, bienvenue <span class="wave">✳</span></h1><p>Voici ce qui se passe dans votre activité aujourd'hui.</p></div><button class="btn btn-outline" id="dashboardExport">↓ Exporter les données</button></div>
+          <div class="stats-grid">
+            <article class="metric-card"><div class="metric-top"><span>Demandes reçues</span><span class="metric-icon blue">↗</span></div><strong id="countAll">0</strong><small class="metric-note">Depuis le début</small><div class="metric-line blue-line"></div></article>
+            <article class="metric-card"><div class="metric-top"><span>À traiter</span><span class="metric-icon amber">◷</span></div><strong id="countOpen">0</strong><small class="metric-note">Demandes actives</small><div class="metric-line amber-line"></div></article>
+            <article class="metric-card"><div class="metric-top"><span>Valeur des devis</span><span class="metric-icon violet">€</span></div><strong id="quoteTotal">0 €</strong><small class="metric-note">Devis envoyés et en cours</small><div class="metric-line violet-line"></div></article>
+            <article class="metric-card"><div class="metric-top"><span>Relances à faire</span><span class="metric-icon rose">⌁</span></div><strong id="countDue">0</strong><small class="metric-note">Aujourd'hui ou en retard</small><div class="metric-line rose-line"></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <section class="surface pipeline-summary"><div class="surface-heading"><div><h2>Votre activité commerciale</h2><p>Répartition des demandes par étape</p></div><button class="text-link" data-goto="pipeline">Voir le pipeline →</button></div><div class="stage-bars" id="stageBars"></div><div class="stage-legend"><span><i class="dot dot-blue"></i>Nouvelles</span><span><i class="dot dot-amber"></i>À chiffrer</span><span><i class="dot dot-violet"></i>Devis envoyés</span><span><i class="dot dot-green"></i>Gagnées</span></div></section>
+            <section class="surface actions-panel"><div class="surface-heading"><div><h2>À ne pas oublier</h2><p>Vos prochaines relances</p></div><button class="text-link" data-goto="reminders">Tout voir →</button></div><div id="dashboardReminders" class="reminder-list"></div></section>
+          </div>
+          <section class="surface recent-panel"><div class="surface-heading"><div><h2>Demandes récentes</h2><p>Les derniers contacts enregistrés</p></div><button class="text-link" data-goto="leads">Toutes les demandes →</button></div><div id="recentTable"></div></section>
+        </section>
+
+        <section id="view-leads" class="view hidden">
+          <div class="page-heading"><div><span class="eyebrow">RELATION CLIENT</span><h1>Demandes clients</h1><p>Centralisez les contacts et gardez une trace de chaque opportunité.</p></div><button class="btn btn-primary" id="addLead">＋ Ajouter une demande</button></div>
+          <section class="surface"><div class="toolbar"><div class="searchbox"><span>⌕</span><input id="search" placeholder="Rechercher un client, un e-mail, une prestation…"></div><select id="statusFilter" class="filter"><option value="">Tous les statuts</option><option value="new">Nouvelle</option><option value="to_quote">À chiffrer</option><option value="sent">Devis envoyé</option><option value="won">Gagné</option><option value="lost">Perdu</option></select><button class="btn btn-outline btn-small" id="export">↓ Export CSV</button></div><div id="leadTable" class="table-wrap"></div></section>
+        </section>
+
+        <section id="view-pipeline" class="view hidden">
+          <div class="page-heading"><div><span class="eyebrow">SUIVI COMMERCIAL</span><h1>Pipeline des devis</h1><p visual>Visualisez vos demandes et faites avancer chaque opportunité.</p></div><button class="btn btn-primary" id="pipelineAdd">＋ Nouvelle demande</button></div>
+          <div id="kanban" class="kanban"></div>
+        </section>
+
+        <section id="view-reminders" class="view hidden">
+          <div class="page-heading"><div><span class="eyebrow">PROCHAINES ACTIONS</span><h1>Relances</h1><p>Ne laissez aucune demande sans réponse.</p></div><button class="btn btn-outline" id="reminderExport">↓ Exporter</button></div>
+          <div class="reminder-stats" id="reminderStats"></div><section class="surface"><div class="surface-heading"><div><h2>Planning des relances</h2><p>Les dates sont basées sur votre calendrier de suivi.</p></div></div><div id="reminderTable" class="table-wrap"></div></section>
+        </section>
+      </div>
+      <footer class="app-footer"><span>atelier. <i>·</i> Gestion commerciale</span><span>Vos données restent dans votre espace privé.</span></footer>
+    </main>
+  </div>
+
+  <div id="leadModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-backdrop" data-close="1"></div><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">FICHE CLIENT</span><h2 id="modalTitle">Nouvelle demande</h2><p>Renseignez les informations utiles au suivi.</p></div><button class="close-btn" data-close="1" aria-label="Fermer">×</button></div><form id="leadForm"><input type="hidden" name="id"><div class="modal-fields"><label>Nom du client *<input name="name" maxlength="100" required placeholder="Ex. Jean Dupont"></label><label>E-mail *<input name="email" type="email" maxlength="180" required placeholder="client@exemple.fr"></label><label>Téléphone<input name="phone" maxlength="40" placeholder="06 00 00 00 00"></label><label>Prestation<input name="service" maxlength="120" placeholder="Ex. remplacement chaudière"></label><label class="field-full">Détails du projet<textarea name="details" maxlength="3000" rows="4" placeholder="Contexte, besoin, adresse d'intervention…"></textarea></label></div><div class="modal-foot"><span id="modalMessage" class="form-message"></span><button type="button" class="btn btn-outline" data-close="1">Annuler</button><button class="btn btn-primary">Enregistrer la demande</button></div></form></div></div>
+  <div id="detailModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-backdrop" data-close-detail="1"></div><div class="modal-card detail-card"><div class="modal-head"><div><span class="eyebrow">DÉTAILS DE LA DEMANDE</span><h2 id="detailName">Client</h2><p id="detailContact"></p></div><button class="close-btn" data-close-detail="1">×</button></div><div id="detailBody"></div></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body></html>
